@@ -1,0 +1,28 @@
+.tab-list {  
+    height: 60px;
+    background-color: #E2E2E2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0;
+}
+  
+.tab-list-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    list-style: none;
+    background-color: #E2E2E2;
+    color: #495057;
+}
+  
+.tab-list-active {
+    background-color: #006AB3;
+    color: white;
+}
+
+.active-border{
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
