@@ -1,29 +1,63 @@
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import React from 'react';
+import TextField from "@material-ui/core/TextField";
+import MenuItem from '@material-ui/core/MenuItem';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { useStylesForDropdown } from "../../styling/components/textfieldStyle"
+import { useStylesForInput } from "../../styling/components/textfieldStyle"
+import PropTypes from 'prop-types'
 
-export default function Dropdown({
+function Dropdown({
+    id,
+    placeholder,
+    label,
+    name,
+    value,
     options,
-    handleDropdown,
-    value
+    error,
+    onChange,
 }) {
-    const classes = useStylesForDropdown();
+    const classes = useStylesForInput();
 
     return (
-        <FormControl className={classes.formControl}>
-            <NativeSelect
-                value={value}
-                name="Select Type"
-                IconComponent={ExpandMoreIcon}
-                onChange={(e) => handleDropdown(e)}
-                disableUnderline={true}
-                inputProps={{ 'aria-label': 'wardrobe types' }}
-            >
-                {options.map((val) => {
-                    return <option disabled={val === value} key={val} value={val}>{val}</option>
-                })}
-            </NativeSelect>
-        </FormControl >
+        <TextField
+            required
+            select
+            fullWidth
+            id={id}
+            placeholder={placeholder}
+            name={name}
+            helperText={error && error}
+            value={value ? value : " "}
+            onChange={onChange}
+            label={label}
+            error={error ? true : false}
+            variant="outlined"
+            className={classes.root}
+            InputProps={{ className: [classes.input, classes.height] }}
+            SelectProps={{ IconComponent: ExpandMoreIcon }}
+            InputLabelProps={{ shrink: true }}
+        >
+            <MenuItem value=" " key=" ">
+                Enter Value...
+            </MenuItem>
+
+            {options && options.map(val => {
+                return (
+                    <MenuItem key={val.key} value={val.value}>{val.key}</MenuItem>
+                )
+            })}
+        </TextField>
     )
 }
+
+Dropdown.propTypes = {
+    id: PropTypes.string,
+    placeholder: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    error: PropTypes.any,
+    onChange: PropTypes.func.isRequired,
+    options: PropTypes.arrayOf(Object)
+}
+
+export default Dropdown

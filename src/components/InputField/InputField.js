@@ -2,9 +2,10 @@ import React from 'react'
 import TextField from "@material-ui/core/TextField";
 import SearchOutlined from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import { useStylesForInput, useStylesForSearchInput } from "../../styling/components/textfieldStyle"
+import { useStylesForInput } from "../../styling/components/textfieldStyle"
+import PropTypes from 'prop-types'
 
-export default function InputField({
+function InputField({
     id,
     type,
     placeholder,
@@ -12,31 +13,30 @@ export default function InputField({
     name,
     value,
     onChange,
-    disableUnderline,
-    disabled,
     variant,
+    error,
     multiline
 }) {
     const classes = useStylesForInput();
-    const sClasses = useStylesForSearchInput()
 
     return (
         <TextField
+            required
             placeholder={placeholder}
             multiline={multiline}
-            disabled={disabled}
             type={type}
             label={label}
             id={id}
             name={name}
             value={value}
+            error={error ? true : false}
+            helperText={error && error}
             onChange={(e) => onChange(e)}
             rows={4}
             variant="outlined"
-            className={`textInputStyle ${variant === 'search' ? sClasses.root : classes.root}`}
+            className={`textInputStyle ${classes.root}`}
             InputProps={{
-                className: variant === 'search' ? sClasses.input : classes.input,
-                disableUnderline: disableUnderline,
+                className: multiline ? classes.input : [classes.input, classes.height],
                 endAdornment: (
                     variant === 'search' &&
                     <InputAdornment position='end'>
@@ -50,3 +50,18 @@ export default function InputField({
         />
     )
 }
+
+InputField.propTypes = {
+    id: PropTypes.string,
+    type: PropTypes.string,
+    placeholder: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    multiline: PropTypes.bool,
+    error: PropTypes.any,
+    name: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    variant: PropTypes.string
+}
+
+export default InputField

@@ -3,5 +3,6 @@ export const colors = {
     PRIMARY_LIGHT: '#006BB3',
     SECONDARY: '#47CB5D',
     MUTED: '#D5D8DA',
+    MUTED_TEXT: '#ACACAC',
     MUTED_LIGHT: '#E2E2E2'
 }

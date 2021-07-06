@@ -7,7 +7,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import { FaEye, FaPen, FaTrashAlt } from 'react-icons/fa'
+import { FaPen, FaTrashAlt } from 'react-icons/fa'
 import { colors } from '../../constants/theme'
 import InputField from '../../components/InputField/InputField'
 import Button from '../../components/Button/Button'
@@ -46,9 +46,10 @@ export default function Index() {
    const [searchJob, setSearchJob] = useState("")
    const [openJobWizard, setOpenJobWizard] = useState(false)
    const [mode, setMode] = useState('')
-   const [jobData, setJobData] = useState([
-      { id: 1, title: 'MERN', experience: '1 year', career: 'Intermediate' },
-      { id: 2, title: 'MEAN', experience: '6 months', career: 'Beginner' }
+   const [selectedJob, setSelectedJob] = useState('')
+   const [jobData] = useState([
+      { title: 'MERN', experience: '1-2 Years', hourRate: '30' },
+      { title: 'MEAN', experience: '<1 Year', hourRate: '35' }
    ])
 
    useEffect(() => {
@@ -62,8 +63,8 @@ export default function Index() {
    }, [searchJob])
 
    const handlePostJobClick = () => {
+      setMode('Create')
       setOpenJobWizard(true)
-      setMode('add')
    }
 
    const handleCloseWizard = () => {
@@ -71,16 +72,15 @@ export default function Index() {
       setMode('')
    }
 
-   const handleViewJob = () => {
-      console.log("View job clicked")
+   const handleEditJob = (job) => {
+      setMode('Update')
+      setSelectedJob(job)
+      setOpenJobWizard(true)
    }
 
-   const handleEditJob = () => {
-      console.log("Edit job clicked")
-   }
-
-   const handleDeleteJob = () => {
-      console.log("Delete job clicked")
+   const handleDeleteJob = (e) => {
+      const deletedJob = filteredJob.filter(job => job.title !== e.title)
+      setfilteredJob(deletedJob)
    }
 
    return (
@@ -118,21 +118,20 @@ export default function Index() {
                            <StyledTableCell>Sr No.</StyledTableCell>
                            <StyledTableCell>Job Title</StyledTableCell>
                            <StyledTableCell>Experience</StyledTableCell>
-                           <StyledTableCell>Career Level</StyledTableCell>
+                           <StyledTableCell>Hour Rate</StyledTableCell>
                            <StyledTableCell align="center">Actions</StyledTableCell>
                         </TableRow>
                      </TableHead>
                      <TableBody>
-                        {filteredJob.map((job) => (
-                           <StyledTableRow key={job.id}>
+                        {filteredJob.map((job, i) => (
+                           <StyledTableRow key={i}>
                               <StyledTableCell component="th" scope="row">
-                                 {job.id}
+                                 {i + 1}
                               </StyledTableCell>
                               <StyledTableCell>{job.title}</StyledTableCell>
                               <StyledTableCell>{job.experience}</StyledTableCell>
-                              <StyledTableCell>{job.career}</StyledTableCell>
+                              <StyledTableCell>{job.hourRate}</StyledTableCell>
                               <StyledTableCell align="center" width='150'>
-                                 <FaEye title='View job details' size={22} color={colors.PRIMARY} onClick={() => handleViewJob(job)} cursor='pointer' />
                                  <FaPen title='Edit job details' size={20} color={colors.SECONDARY} onClick={() => handleEditJob(job)} cursor='pointer' className='ml-3 mr-3' />
                                  <FaTrashAlt title='Delete job' size={20} color='#e64e4e' onClick={() => handleDeleteJob(job)} cursor='pointer' />
                               </StyledTableCell>
@@ -143,7 +142,14 @@ export default function Index() {
                </TableContainer>
             </div>
          </div>
-         <CreateJob open={openJobWizard} mode={mode} onClose={handleCloseWizard} />
+         <CreateJob
+            open={openJobWizard}
+            mode={mode}
+            onClose={handleCloseWizard}
+            jobData={filteredJob}
+            setJobData={setfilteredJob}
+            selectedJob={selectedJob}
+         />
       </div>
    )
 }
