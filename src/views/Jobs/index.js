@@ -12,6 +12,7 @@ import { colors } from '../../constants/theme'
 import InputField from '../../components/InputField/InputField'
 import Button from '../../components/Button/Button'
 import CreateJob from './createJob'
+import Notification from '../../components/Notification/Notification';
 
 const StyledTableCell = withStyles((theme) => ({
    head: {
@@ -85,7 +86,12 @@ export default function Index() {
 
    return (
       <div className='container-fluid'>
-         <div className='row mt-3 pl-2'>
+         <div className='row'>
+            <div className='col-12 mt-3 pr-4 d-flex justify-content-end'>
+               <Notification />
+            </div>
+         </div>
+         <div className='row mt-4 pl-2'>
             <div className='col-6 d-flex align-items-center pl-4'>
                <h2 style={{ color: colors.PRIMARY }}>List of Jobs</h2>
             </div>

@@ -10,12 +10,15 @@ import Tabs from '../../components/Tabs/Tabs';
 import JobInformation from './jobInformation';
 import CandidateType from './candidateType';
 import ShiftTimings from './shiftTimings';
+import { connect } from 'react-redux';
+import { generateNotification } from '../../actions';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CreateJob({ open, mode, onClose, jobData, setJobData, selectedJob }) {
+function CreateJob(props) {
+    const { open, mode, onClose, jobData, setJobData, selectedJob } = props
     const [step, setStep] = useState(0)
     const [errors, setErrors] = useState({})
     const [jobInfo, setJobInfo] = useState({
@@ -188,6 +191,7 @@ export default function CreateJob({ open, mode, onClose, jobData, setJobData, se
     const handleCreatePost = () => {
         if (step === 2 && validateShiftTime()) {
             setJobData(prev => [...prev, { ...jobInfo, ...candidateType, shiftTimings: daysList }])
+            props.generateNotification({ title: jobInfo.title, message: 'New Job Posted.' })
             handleClose()
         }
     }
@@ -279,3 +283,5 @@ export default function CreateJob({ open, mode, onClose, jobData, setJobData, se
         </Dialog>
     )
 }
+
+export default connect(null, { generateNotification })(CreateJob)
